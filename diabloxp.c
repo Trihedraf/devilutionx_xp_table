@@ -40,6 +40,7 @@
  */
 int clvl,						/* Character level			*/
     skill,						/* Skill				*/
+    hp_add,						/* Monster hp bonus   <--(nightmare and hell) */
     hp_mult,						/* Monster hp multipler   <--\		*/
     exp_add;						/* Exp bonus   <--(nightmare and hell)	*/
 
@@ -138,7 +139,7 @@ void clvl_data(int clvl)
 void dlvl_data(int clvl, int skill)
 {
 	short dlvl;
-	extern exp_add, hp_mult;
+	extern exp_add, hp_add, hp_mult;
 							/* When to NOT print:			*/
 	if (skill==1 && clvl>=40||				/* Normal: 40+			*/
 	    skill==2 && clvl<20 ||				/* Night:  20-			*/
@@ -158,16 +159,19 @@ void dlvl_data(int clvl, int skill)
 							/* What skill is this?			*/
 	switch (skill) {
 		case 1:					/* 1 = Normal				*/
+			hp_add = 0;				/* Monster hp: +0 difficulty bonus */
 			hp_mult = 1;				/* Monster hp: 1x normal	*/
 			exp_add = 0;				/* No exp-bonus			*/
 			printf("Norm\n");			/* Print out skill		*/
 			break;
 		case 2:					/* 2 = Nightmare			*/
+			hp_add = 100;				/* Monster hp: +100 difficulty bonus */
 			hp_mult = 3;				/* Monster hp: 3x normal	*/
 			exp_add = 2000;				/* Exp: normal + 2000		*/
 			printf("Night\n");			/* Print out skill		*/
 			break;
 		case 4:					/* 4 = Hell				*/
+			hp_add = 200;				/* Monster hp: +200 difficulty bonus */
 			hp_mult = 4;				/* Monster hp: 4x normal	*/
 			exp_add = 4000;				/* Exp: normal + 4000		*/
 			printf("Hell\n");			/* Print out skill		*/
@@ -188,7 +192,7 @@ void dlvl_data(int clvl, int skill)
 float mstr(int mlvl, int basexp, float hp, int xp_only)
 {
 	float exp;
-	extern int clvl, skill, hp_mult;
+	extern int clvl, skill, hp_add, hp_mult;
 
 	if (skill > 1)					/* Set the mlvl according to skill	*/
 		mlvl = mlvl + skill * 7.5;
@@ -201,7 +205,7 @@ float mstr(int mlvl, int basexp, float hp, int xp_only)
 	if (xp_only)					/* Return exp only			*/
 		return exp;
 	else						/* Return exp per hitpoints		*/
-		return exp / (hp_mult * hp + skill - 1.0);
+		return exp / (hp_mult * hp + hp_add + skill - 1.0);
 }
 
 
