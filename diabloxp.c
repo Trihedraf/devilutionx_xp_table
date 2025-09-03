@@ -176,7 +176,7 @@ float mstr(int mlvl, int basexp, float hp, int xp_only)
     if (xp_only) /* Return exp only */
         return exp;
     else /* Return exp per hitpoints */
-        return exp / (hp_mult * hp + hp_add + skill - 1.0);
+        return exp / (hp_mult * hp + hp_add);
 }
 
 /* Calculate average experience points from a dungeon level
