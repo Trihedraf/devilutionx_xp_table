@@ -46,7 +46,7 @@ void main(void)
         for (skill = 1; skill <= 4; skill = 2 * skill) /* Loop skill 1, 2 and 4 */
             dlvl_data(clvl, skill);                    /* Print dlvl data  */
     }
-    printf("\n</table>\n</body>\n</html>"); /* Print table- and HTML-terminator */
+    printf("      </table>\n\n    </center>\n  </body>\n</html>"); /* Print table- and HTML-terminator */
 }
 
 /* Print the headers of the file
@@ -56,29 +56,50 @@ void file_headers(void)
     /* Print HTML header */
     printf(/* "Content-type: text/html\n\n" */
            "<html>\n"
-           "<head>\n"
-           "<center>\n"
-           "<title>Experience Point Table</title>\n"
-           "</head>\n"
-           "<body bgcolor=#%s text=#%s>\n\n",
+           "  <head>\n"
+           "    <title>Experience Point Table</title>\n"
+           "  </head>\n"
+           "  <body bgcolor=#%s text=#%s>\n"
+           "    <center>\n\n",
            bg_color, text_color);
 
     /* Print Table header */
-    printf("<table border=1 bgcolor=#%s>\n\n"
-           "<th rowspan=3>clvl\n"
-           "<th rowspan=3>Skill\n"
-           "<th colspan=19>Dungeon level\n"
-           "<tr>\n"
-           "<th colspan=4>Church<th bgcolor=#%s>\n"
-           "<th colspan=4>Catacombs<th bgcolor=#%s>\n"
-           "<th colspan=4>Caves<th bgcolor=#%s>\n"
-           "<th colspan=4>Hell\n"
-           "<tr>\n"
-           "<th> 1<th> 2<th> 3<th> 4<th bgcolor=#%s>\n"
-           "<th> 5<th> 6<th> 7<th> 8<th bgcolor=#%s>\n"
-           "<th> 9<th>10<th>11<th>12<th bgcolor=#%s>\n"
-           "<th>13<th>14<th>15<th>16\n"
-           "<tr>\n",
+    printf("      <table border=1 bgcolor=#%s>\n"
+           "        <tr>\n"
+           "          <th rowspan=3>clvl</th>\n"
+           "          <th rowspan=3>Skill</th>\n"
+           "          <th colspan=19>Dungeon level</th>\n"
+           "        </tr>\n"
+           "        <tr>\n"
+           "          <th colspan=4>Church</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th colspan=4>Catacombs</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th colspan=4>Caves</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th colspan=4>Hell</th>\n"
+           "        </tr>\n"
+           "        <tr>\n"
+           "          <th> 1</th>\n"
+           "          <th> 2</th>\n"
+           "          <th> 3</th>\n"
+           "          <th> 4</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th> 5</th>\n"
+           "          <th> 6</th>\n"
+           "          <th> 7</th>\n"
+           "          <th> 8</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th> 9</th>\n"
+           "          <th>10</th>\n"
+           "          <th>11</th>\n"
+           "          <th>12</th>\n"
+           "          <th bgcolor=#%s />\n"
+           "          <th>13</th>\n"
+           "          <th>14</th>\n"
+           "          <th>15</th>\n"
+           "          <th>16</th>\n"
+           "        </tr>\n",
            even_color, bg_color, bg_color, bg_color, bg_color, bg_color, bg_color);
 }
 
@@ -86,15 +107,15 @@ void file_headers(void)
  */
 void clvl_data(int clvl)
 {
-    printf("\n<tr align=right bgcolor=#"); /* Define a new row */
+    printf("\n        <tr align=right bgcolor=#"); /* Define a new row */
     if (clvl % 2)                          /* Choose bgcolor accoring to clvl: */
         printf("%s", odd_color);
     else
-    printf("><th ");
         printf("%s", even_color);
+    printf(">\n          <th align=center ");
     /* How many rows for this clvl? */
-    if (clvl < 20)               /* 01-19: */
-        printf("align=center>"); /* One row */
+    if (clvl < 20)   /* 01-19: */
+        printf(">"); /* One row */
 
     else if (clvl >= 30 && clvl < 40) /* 30-39: */
         printf("rowspan=3>");         /* Three rows */
@@ -102,7 +123,8 @@ void clvl_data(int clvl)
     else                      /* 20-29, 40-50: */
         printf("rowspan=2>"); /* Two rows */
 
-    printf("%d\n", clvl); /* Print the character level */
+    printf("%d", clvl); /* Print the character level */
+    printf("</th>\n");
 }
 
 /* Print the dungeon data
@@ -120,44 +142,44 @@ void dlvl_data(int clvl, int skill)
     if (skill == 2 && clvl < 40 || /* Night, up to clvl 40 */
         skill == 4)
     { /* Hell, always */
-        printf("<tr align=right bgcolor=#");
+        printf("        <tr align=right bgcolor=#");
         if (clvl % 2) /* Choose bgcolor for this row: */
             printf("%s", odd_color);
         else
             printf("%s", even_color);
         printf(">\n");
     }
-    printf("<th align=left>");
+    printf("          <th align=left>");
     /* What skill is this? */
     switch (skill)
     {
-    case 1:               /* 1 = Normal */
-        hp_add = 0;       /* Monster hp: +0 difficulty bonus */
-        hp_mult = 1;      /* Monster hp: 1x normal */
-        exp_add = 0;      /* No exp-bonus */
-        printf("Norm\n"); /* Print out skill */
+    case 1:             /* 1 = Normal */
+        hp_add = 0;     /* Monster hp: +0 difficulty bonus */
+        hp_mult = 1;    /* Monster hp: 1x normal */
+        exp_add = 0;    /* No exp-bonus */
+        printf("Norm"); /* Print out skill */
         break;
-    case 2:                /* 2 = Nightmare */
-        hp_add = 100;      /* Monster hp: +100 difficulty bonus */
-        hp_mult = 3;       /* Monster hp: 3x normal */
-        exp_add = 2000;    /* Exp: normal + 2000 */
-        printf("Night\n"); /* Print out skill */
+    case 2:              /* 2 = Nightmare */
+        hp_add = 100;    /* Monster hp: +100 difficulty bonus */
+        hp_mult = 3;     /* Monster hp: 3x normal */
+        exp_add = 2000;  /* Exp: normal + 2000 */
+        printf("Night"); /* Print out skill */
         break;
-    case 4:               /* 4 = Hell */
-        hp_add = 200;     /* Monster hp: +200 difficulty bonus */
-        hp_mult = 4;      /* Monster hp: 4x normal */
-        exp_add = 4000;   /* Exp: normal + 4000 */
-        printf("Hell\n"); /* Print out skill */
+    case 4:             /* 4 = Hell */
+        hp_add = 200;   /* Monster hp: +200 difficulty bonus */
+        hp_mult = 4;    /* Monster hp: 4x normal */
+        exp_add = 4000; /* Exp: normal + 4000 */
+        printf("Hell"); /* Print out skill */
         break;
     }
+    printf("</th>");
     for (dlvl = 1; dlvl <= 16; dlvl++)
     { /* Write table data */
-        printf("<td>\t\t\t%5d<br>\t%3d", dungeon(dlvl, exp_only), dungeon(dlvl, exp_per_hp));
-        if (!(dlvl % 4) && dlvl % 16)         /* Empty column every 4th dlvl, */
-        if (!(dlvl % 2))
-            printf("\n"); /* New line every 2nd dlvl */
-            printf("\n<td bgcolor=#%s />", bg_color); /* but not dlvl 16 */
+        printf("\n          <td>%5d<br />%3d</td>", dungeon(dlvl, exp_only), dungeon(dlvl, exp_per_hp));
+        if (!(dlvl % 4) && dlvl % 16)                 /* Empty column every 4th dlvl, */
+            printf("\n          <td bgcolor=#%s />", bg_color); /* but not dlvl 16 */
     }
+    printf("\n        </tr>\n");
 }
 
 /* Calculate experience point from a monster
