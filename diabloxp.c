@@ -109,7 +109,7 @@ void clvl_data(int clvl)
 void dlvl_data(int clvl, int skill)
 {
     short dlvl;
-    extern exp_add, hp_add, hp_mult;
+    extern int exp_add, hp_add, hp_mult;
     /* When to NOT print: */
     if (skill == 1 && clvl >= 40 || /* Normal: 40+ */
         skill == 2 && clvl < 20 ||  /* Night:  20- */
