@@ -9,10 +9,6 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
-#define YES 1
-#define NO 0
-#define EXP_ONLY 1 /* \ Used to tell functions what to do; */
-#define EXP_HP 0   /* / return only exp, or exp per hp */
 
 /* Global variables:
  */
@@ -21,6 +17,9 @@ int clvl,    /* Character level */
     hp_add,  /* Monster hp bonus per difficulty */
     hp_mult, /* Monster hp multipler per difficulty*/
     exp_add; /* Exp bonus per difficulty */
+
+const int   exp_only = 1,
+            exp_per_hp = 0;
 
 /* Functions:
  */
@@ -151,7 +150,7 @@ void dlvl_data(int clvl, int skill)
     }
     for (dlvl = 1; dlvl <= 16; dlvl++)
     { /* Write table data */
-        printf("<td>\t\t\t%5d<br>\t%3d", dungeon(dlvl, EXP_ONLY), dungeon(dlvl, EXP_HP));
+        printf("<td>\t\t\t%5d<br>\t%3d", dungeon(dlvl, exp_only), dungeon(dlvl, exp_per_hp));
         if (!(dlvl % 4) && dlvl % 16)         /* Empty column every 4th dlvl, */
             printf("\n<td bgcolor=#FFFFFF>"); /* but not dlvl 16 */
         if (!(dlvl % 2))
@@ -182,8 +181,8 @@ float mstr(int mlvl, int basexp, float hp, int xp_only)
 
 /* Calculate average experience points from a dungeon level
  * Value of 'r' determines what to return:
- * 1 (EXP_ONLY): experience only
- * 0 (EXP_HP): experience per hitpoints
+ * 1 (exp_only): experience only
+ * 0 (exp_per_hp): experience per hitpoints
  */
 int dungeon(short dlvl, int r)
 {
