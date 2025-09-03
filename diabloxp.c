@@ -18,8 +18,13 @@ int clvl,    /* Character level */
     hp_mult, /* Monster hp multipler per difficulty*/
     exp_add; /* Exp bonus per difficulty */
 
-const int   exp_only = 1,
-            exp_per_hp = 0;
+const int exp_only = 1,
+          exp_per_hp = 0;
+
+char bg_color[] = "000000",
+     text_color[] = "FFFFFF",
+     even_color[] = "2D2D2D",
+     odd_color[] = "3D3D3D";
 
 /* Functions:
  */
@@ -55,29 +60,26 @@ void file_headers(void)
            "<center>\n"
            "<title>Experience Point Table</title>\n"
            "</head>\n"
-           "<body\n"
-           "bgcolor\t= #FFFFFF\n"
-           "text\t= #000000\n"
-           "link\t= #0000FF\n"
-           "vlink\t= #000080\n"
-           "alink\t= #FF0000\n>\n\n");
+           "<body bgcolor=#%s text=#%s>\n\n",
+           bg_color, text_color);
 
     /* Print Table header */
-    printf("<table border=1 bgcolor=#9090FF>\n\n"
-           "<th rowspan = 3>clvl\n"
-           "<th rowspan = 3>Skill\n"
-           "<th colspan =19>Dungeon level\n"
+    printf("<table border=1 bgcolor=#%s>\n\n"
+           "<th rowspan=3>clvl\n"
+           "<th rowspan=3>Skill\n"
+           "<th colspan=19>Dungeon level\n"
            "<tr>\n"
-           "<th colspan = 4>Church\t <th bgcolor=#FFFFFF>\n"
-           "<th colspan = 4>Catacombs<th bgcolor=#FFFFFF>\n"
-           "<th colspan = 4>Caves\t <th bgcolor=#FFFFFF>\n"
-           "<th colspan = 4>Hell\n"
+           "<th colspan=4>Church<th bgcolor=#%s>\n"
+           "<th colspan=4>Catacombs<th bgcolor=#%s>\n"
+           "<th colspan=4>Caves<th bgcolor=#%s>\n"
+           "<th colspan=4>Hell\n"
            "<tr>\n"
-           "<th> 1<th> 2<th> 3<th> 4<th bgcolor=#FFFFFF>\n"
-           "<th> 5<th> 6<th> 7<th> 8<th bgcolor=#FFFFFF>\n"
-           "<th> 9<th>10<th>11<th>12<th bgcolor=#FFFFFF>\n"
+           "<th> 1<th> 2<th> 3<th> 4<th bgcolor=#%s>\n"
+           "<th> 5<th> 6<th> 7<th> 8<th bgcolor=#%s>\n"
+           "<th> 9<th>10<th>11<th>12<th bgcolor=#%s>\n"
            "<th>13<th>14<th>15<th>16\n"
-           "<tr>\n");
+           "<tr>\n",
+           even_color, bg_color, bg_color, bg_color, bg_color, bg_color, bg_color);
 }
 
 /* Print the clvl data
@@ -86,10 +88,10 @@ void clvl_data(int clvl)
 {
     printf("\n<tr align=right bgcolor=#"); /* Define a new row */
     if (clvl % 2)                          /* Choose bgcolor accoring to clvl: */
-        printf("B0B0FF");                  /* Odd color */
+        printf("%s", odd_color);
     else
-        printf("9090FF"); /* Even color */
     printf("><th ");
+        printf("%s", even_color);
     /* How many rows for this clvl? */
     if (clvl < 20)               /* 01-19: */
         printf("align=center>"); /* One row */
@@ -119,10 +121,10 @@ void dlvl_data(int clvl, int skill)
         skill == 4)
     { /* Hell, always */
         printf("<tr align=right bgcolor=#");
-        if (clvl % 2)         /* Choose bgcolor for this row: */
-            printf("B0B0FF"); /* Odd color */
+        if (clvl % 2) /* Choose bgcolor for this row: */
+            printf("%s", odd_color);
         else
-            printf("9090FF"); /* Even color */
+            printf("%s", even_color);
         printf(">\n");
     }
     printf("<th align=left>");
@@ -152,9 +154,9 @@ void dlvl_data(int clvl, int skill)
     { /* Write table data */
         printf("<td>\t\t\t%5d<br>\t%3d", dungeon(dlvl, exp_only), dungeon(dlvl, exp_per_hp));
         if (!(dlvl % 4) && dlvl % 16)         /* Empty column every 4th dlvl, */
-            printf("\n<td bgcolor=#FFFFFF>"); /* but not dlvl 16 */
         if (!(dlvl % 2))
             printf("\n"); /* New line every 2nd dlvl */
+            printf("\n<td bgcolor=#%s />", bg_color); /* but not dlvl 16 */
     }
 }
 
