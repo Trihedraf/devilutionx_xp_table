@@ -1,18 +1,18 @@
 #include <stdio.h>
 
-int clvl, /* Character level */
-    difficulty,
-    hp_add,  /* Monster hp bonus per difficulty */
-    hp_mult, /* Monster hp multipler per difficulty*/
-    exp_add; /* Exp bonus per difficulty */
+int clvl; /* Character level */
+int difficulty;
+int hp_add;  /* Monster hp bonus per difficulty */
+int hp_mult; /* Monster hp multipler per difficulty*/
+int exp_add; /* Exp bonus per difficulty */
 
-const int exp_only = 1,
-          exp_per_hp = 0;
+const int exp_only = 1;
+const int exp_per_hp = 0;
 
-char bg_color[] = "000000",
-     text_color[] = "FFFFFF",
-     even_color[] = "2D2D2D",
-     odd_color[] = "3D3D3D";
+char bg_color[] = "000000";
+char text_color[] = "FFFFFF";
+char even_color[] = "2D2D2D";
+char odd_color[] = "3D3D3D";
 
 void print_html_header(void);
 void print_clvl(int clvl);
@@ -20,15 +20,12 @@ void print_dlvl(int clvl, int difficulty);
 float monster(int mlvl, int base_exp, float hp, int xp_only);
 int dungeon(short dlvl, int xp_only);
 
-void main(void)
-{
-    extern int clvl,
-        difficulty;
+void main(void) {
+    extern int clvl, difficulty;
 
     print_html_header();
 
-    for (clvl = 1; clvl <= 50; clvl++)
-    {
+    for (clvl = 1; clvl <= 50; clvl++) {
         print_clvl(clvl);
         for (difficulty = 1; difficulty <= 4; difficulty = 2 * difficulty)
             print_dlvl(clvl, difficulty);
@@ -37,8 +34,7 @@ void main(void)
     printf("      </table>\n\n    </center>\n  </body>\n</html>");
 }
 
-void print_html_header(void)
-{
+void print_html_header(void) {
     printf("<html>\n"
            "  <head>\n"
            "    <title>Experience Point Table</title>\n"
@@ -86,8 +82,7 @@ void print_html_header(void)
            even_color, bg_color, bg_color, bg_color, bg_color, bg_color, bg_color);
 }
 
-void print_clvl(int clvl)
-{
+void print_clvl(int clvl) {
     printf("\n        <tr align=right bgcolor=#"); /* Define a new row */
 
     /* Choose bgcolor accoring to clvl: */
@@ -110,8 +105,7 @@ void print_clvl(int clvl)
     printf("</th>\n");
 }
 
-void print_dlvl(int clvl, int difficulty)
-{
+void print_dlvl(int clvl, int difficulty) {
     short dlvl;
     extern int exp_add, hp_add, hp_mult;
 
@@ -121,8 +115,7 @@ void print_dlvl(int clvl, int difficulty)
         difficulty == 4 && clvl < 30)    /* Hell:    <30 */
         return;
 
-    if (difficulty == 2 && clvl < 40 || difficulty == 4)
-    {
+    if (difficulty == 2 && clvl < 40 || difficulty == 4) {
         printf("        <tr align=right bgcolor=#");
 
         if (clvl % 2)
@@ -135,8 +128,7 @@ void print_dlvl(int clvl, int difficulty)
 
     printf("          <th align=center>");
 
-    switch (difficulty)
-    {
+    switch (difficulty) {
     case 1: /* Normal */
         hp_add = 0;
         hp_mult = 1;
@@ -159,8 +151,7 @@ void print_dlvl(int clvl, int difficulty)
 
     printf("</th>");
 
-    for (dlvl = 1; dlvl <= 16; dlvl++)
-    {
+    for (dlvl = 1; dlvl <= 16; dlvl++) {
         printf("\n          <td>%5d<br />%3d</td>", dungeon(dlvl, exp_only), dungeon(dlvl, exp_per_hp));
 
         if (!(dlvl % 4) && dlvl % 16)                           /* Empty column every 4th dlvl, */
@@ -170,8 +161,7 @@ void print_dlvl(int clvl, int difficulty)
     printf("\n        </tr>\n");
 }
 
-float monster(int mlvl, int basexp, float hp, int xp_only)
-{
+float monster(int mlvl, int basexp, float hp, int xp_only) {
     float exp;
     extern int clvl, difficulty, hp_add, hp_mult;
 
@@ -196,10 +186,8 @@ float monster(int mlvl, int basexp, float hp, int xp_only)
  * 1 (exp_only): experience only
  * 0 (exp_per_hp): experience per hitpoints
  */
-int dungeon(short dlvl, int r)
-{
-    switch (dlvl)
-    {
+int dungeon(short dlvl, int r) {
+    switch (dlvl) {
     case 1:                              /* Dungeon level 1: */
         return (monster(1, 54, 5.5, r) + /* Zombie */
                 monster(1, 46, 2.5, r) + /* Fallen One Spear */
