@@ -149,7 +149,7 @@ void dlvl_data(int clvl, int difficulty)
             printf("%s", even_color);
         printf(">\n");
     }
-    printf("          <th align=left>");
+    printf("          <th align=center>");
     /* What difficulty is this? */
     switch (difficulty)
     {
