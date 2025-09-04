@@ -47,7 +47,6 @@ void print_html_header(void) {
            "        <tr>\n"
            "          <th rowspan=3>clvl</th>\n"
            "          <th rowspan=3>Diff</th>\n"
-           "          <th colspan=19>Dungeon level</th>\n"
            "        </tr>\n"
            "        <tr>\n"
            "          <th colspan=4>Church</th>\n"
