@@ -13,7 +13,7 @@
 /* Global variables:
  */
 int clvl,    /* Character level */
-    skill,   /* Skill */
+    difficulty,   /* Difficulty */
     hp_add,  /* Monster hp bonus per difficulty */
     hp_mult, /* Monster hp multipler per difficulty*/
     exp_add; /* Exp bonus per difficulty */
@@ -30,21 +30,21 @@ char bg_color[] = "000000",
  */
 void file_headers(void);                                   /* Print out file-headers */
 void clvl_data(int clvl);                                  /* Print clvl data */
-void dlvl_data(int clvl, int skill);                       /* Print dlvl data */
+void dlvl_data(int clvl, int difficulty);                       /* Print dlvl data */
 float mstr(int mlvl, int base_exp, float hp, int xp_only); /* Calculate exp from monster */
 int dungeon(short dlvl, int xp_only);                      /* Calculate avg. exp from a dungeon */
 
 void main(void)
 {
     extern int clvl, /* Get those global variables */
-        skill;
+        difficulty;
 
     file_headers(); /* Print file headers */
     for (clvl = 1; clvl <= 50; clvl++)
     {                                                  /* Loop from clvl 1 to 50 */
         clvl_data(clvl);                               /* Print clvl data */
-        for (skill = 1; skill <= 4; skill = 2 * skill) /* Loop skill 1, 2 and 4 */
-            dlvl_data(clvl, skill);                    /* Print dlvl data  */
+        for (difficulty = 1; difficulty <= 4; difficulty = 2 * difficulty) /* Loop difficulty 1, 2 and 4 */
+            dlvl_data(clvl, difficulty);                    /* Print dlvl data  */
     }
     printf("      </table>\n\n    </center>\n  </body>\n</html>"); /* Print table- and HTML-terminator */
 }
@@ -67,7 +67,7 @@ void file_headers(void)
     printf("      <table border=1 bgcolor=#%s>\n"
            "        <tr>\n"
            "          <th rowspan=3>clvl</th>\n"
-           "          <th rowspan=3>Skill</th>\n"
+           "          <th rowspan=3>Diff</th>\n"
            "          <th colspan=19>Dungeon level</th>\n"
            "        </tr>\n"
            "        <tr>\n"
@@ -129,18 +129,18 @@ void clvl_data(int clvl)
 
 /* Print the dungeon data
  */
-void dlvl_data(int clvl, int skill)
+void dlvl_data(int clvl, int difficulty)
 {
     short dlvl;
     extern int exp_add, hp_add, hp_mult;
     /* When to NOT print: */
-    if (skill == 1 && clvl >= 40 || /* Normal: 40+ */
-        skill == 2 && clvl < 20 ||  /* Night:  20- */
-        skill == 4 && clvl < 30)    /* Hell:   30- */
+    if (difficulty == 1 && clvl >= 40 || /* Normal: 40+ */
+        difficulty == 2 && clvl < 20 ||  /* Night:  20- */
+        difficulty == 4 && clvl < 30)    /* Hell:   30- */
         return;
     /* Define a new row when: */
-    if (skill == 2 && clvl < 40 || /* Night, up to clvl 40 */
-        skill == 4)
+    if (difficulty == 2 && clvl < 40 || /* Night, up to clvl 40 */
+        difficulty == 4)
     { /* Hell, always */
         printf("        <tr align=right bgcolor=#");
         if (clvl % 2) /* Choose bgcolor for this row: */
@@ -150,26 +150,26 @@ void dlvl_data(int clvl, int skill)
         printf(">\n");
     }
     printf("          <th align=left>");
-    /* What skill is this? */
-    switch (skill)
+    /* What difficulty is this? */
+    switch (difficulty)
     {
     case 1:             /* 1 = Normal */
         hp_add = 0;     /* Monster hp: +0 difficulty bonus */
         hp_mult = 1;    /* Monster hp: 1x normal */
         exp_add = 0;    /* No exp-bonus */
-        printf("Norm"); /* Print out skill */
+        printf("Norm"); /* Print out difficulty */
         break;
     case 2:              /* 2 = Nightmare */
         hp_add = 100;    /* Monster hp: +100 difficulty bonus */
         hp_mult = 3;     /* Monster hp: 3x normal */
         exp_add = 2000;  /* Exp: normal + 2000 */
-        printf("Night"); /* Print out skill */
+        printf("Night"); /* Print out difficulty */
         break;
     case 4:             /* 4 = Hell */
         hp_add = 200;   /* Monster hp: +200 difficulty bonus */
         hp_mult = 4;    /* Monster hp: 4x normal */
         exp_add = 4000; /* Exp: normal + 4000 */
-        printf("Hell"); /* Print out skill */
+        printf("Hell"); /* Print out difficulty */
         break;
     }
     printf("</th>");
@@ -187,11 +187,11 @@ void dlvl_data(int clvl, int skill)
 float mstr(int mlvl, int basexp, float hp, int xp_only)
 {
     float exp;
-    extern int clvl, skill, hp_add, hp_mult;
+    extern int clvl, difficulty, hp_add, hp_mult;
 
-    if (skill > 1) /* Set the mlvl according to skill */
-        mlvl = mlvl + skill * 7.5;
-    exp = (skill * basexp + exp_add) * /* Calculate experience points */
+    if (difficulty > 1) /* Set the mlvl according to difficulty */
+        mlvl = mlvl + difficulty * 7.5;
+    exp = (difficulty * basexp + exp_add) * /* Calculate experience points */
           (1 + .1 * (mlvl - clvl));
     if (exp > 200 * clvl) /* Not over the 200*clvl cap */
         exp = 200 * clvl;
